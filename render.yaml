@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: mcdash-backup-bot
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: starter
+    region: singapore
+
+    # Render injects PORT automatically — no need to set it here
+    envVars:
+      - key: MCDASH_URL
+        value: http://sgp2.bytenut.cc:11913   # change to your panel URL
+
+      - key: MCDASH_TOKEN
+        sync: false                            # Render will prompt you for this
+
+      - key: TELEGRAM_API_ID
+        sync: false
+
+      - key: TELEGRAM_API_HASH
+        sync: false
+
+      - key: TELEGRAM_PHONE
+        sync: false
+
+      - key: TELEGRAM_SESSION
+        sync: false                            # paste after first OTP login
+
+      - key: BACKUP_INTERVAL_SEC
+        value: "300"
