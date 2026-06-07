@@ -41,4 +41,4 @@ ENV PORT=8080
 EXPOSE 8080
 
 # tsx runs TypeScript directly — no compilation step needed
-CMD ["node_modules/.bin/tsx", "scripts/src/backup-bot.ts"]
+CMD ["scripts/node_modules/.bin/tsx", "scripts/src/backup-bot.ts"]
