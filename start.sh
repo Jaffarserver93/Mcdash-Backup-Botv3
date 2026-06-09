@@ -67,7 +67,7 @@ else
   prompt_var TELEGRAM_PHONE     "Your phone number with country code (e.g. +918317570365)"
   prompt_var MCDASH_URL         "MCDash panel URL (e.g. http://sgp2.bytenut.cc:11913)"
   prompt_var MCDASH_TOKEN       "MCDash API token"
-  echo "BACKUP_INTERVAL_SEC=300" >> "$ENV_FILE"
+  prompt_var BACKUP_INTERVAL_SEC "Backup interval in seconds (e.g. 300 = every 5 minutes)"
   echo -e "${GREEN}✓ .env created${RESET}"
 fi
 
