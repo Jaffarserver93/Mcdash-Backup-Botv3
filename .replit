@@ -53,6 +53,8 @@ externalPort = 80
 [userenv.shared]
 PORT = "8080"
 MCDASH_URL = "http://sgp2.bytenut.cc:11913"
+BACKUP_INTERVAL_SEC = "300"
+NODE_ENV = "production"
 
 [nix]
 channel = "stable-25_05"
