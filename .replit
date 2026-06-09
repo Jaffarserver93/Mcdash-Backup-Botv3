@@ -30,7 +30,6 @@ outputType = "console"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "pnpm --filter @workspace/scripts run backup-bot"
-waitForPort = 8080
 
 [agent]
 stack = "BEST_EFFORT_FALLBACK"
@@ -48,6 +47,10 @@ externalPort = 8080
 localPort = 8081
 externalPort = 80
 
+[[ports]]
+localPort = 8082
+externalPort = 3000
+
 [userenv]
 
 [userenv.shared]
@@ -55,6 +58,7 @@ PORT = "8080"
 MCDASH_URL = "http://sgp2.bytenut.cc:11913"
 BACKUP_INTERVAL_SEC = "300"
 NODE_ENV = "production"
+BOT_PORT = "8082"
 
 [nix]
 channel = "stable-25_05"

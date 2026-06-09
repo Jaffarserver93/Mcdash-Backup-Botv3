@@ -19,7 +19,7 @@ const API_HASH     = process.env.TELEGRAM_API_HASH          || "";
 const PHONE        = process.env.TELEGRAM_PHONE             || "";
 const SESSION_ENV  = process.env.TELEGRAM_SESSION           || "";
 const INTERVAL_MS  = parseInt(process.env.BACKUP_INTERVAL_SEC || "300") * 1000;
-const PORT         = parseInt(process.env.PORT              || "8080");
+const PORT         = parseInt(process.env.BOT_PORT          || "8082");
 
 for (const [k, v] of Object.entries({
   MCDASH_URL, MCDASH_TOKEN,
@@ -229,12 +229,23 @@ function handleRequest(req: IncomingMessage, res: ServerResponse): void {
 }
 
 async function waitForOtp(): Promise<string> {
-  setStatus({ phase: "awaiting_otp", message: "Open the bot URL and enter the OTP sent to your Telegram" });
-  log("telegram", `OTP sent to ${PHONE}. Open the service URL and enter the code.`);
+  setStatus({ phase: "awaiting_otp", message: "Check your Telegram — enter the OTP code in the terminal" });
+  log("telegram", "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  log("telegram", `OTP sent to ${PHONE}. Type the code and press Enter:`);
+  log("telegram", "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+  process.stdout.write("OTP code: ");
   return new Promise<string>((resolve) => {
-    pendingOtp = resolve;
+    let code = "";
+    process.stdin.setEncoding("utf8");
+    process.stdin.resume();
+    process.stdin.once("data", (chunk) => {
+      code = String(chunk).trim();
+      process.stdin.pause();
+      resolve(code);
+    });
     setTimeout(() => {
-      if (pendingOtp) { pendingOtp = null; resolve(""); }
+      process.stdin.pause();
+      resolve("");
     }, 10 * 60_000);
   });
 }
@@ -258,7 +269,13 @@ async function main(): Promise<void> {
     log("telegram", "Session loaded from TELEGRAM_SESSION env var");
   }
 
-  const session = new StringSession(sessionString);
+  let session: StringSession;
+  try {
+    session = new StringSession(sessionString);
+  } catch {
+    log("telegram", "Saved session was invalid — starting fresh authentication");
+    session = new StringSession("");
+  }
   const client = new TelegramClient(session, API_ID, API_HASH, {
     connectionRetries: 5,
     retryDelay: 3_000,
