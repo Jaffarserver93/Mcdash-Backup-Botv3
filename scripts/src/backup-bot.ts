@@ -297,6 +297,17 @@ async function main(): Promise<void> {
   log("telegram", savedSession);
   log("telegram", "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
+  // ── Send startup notification, delete after 20 seconds ──
+  try {
+    const startMsg = await client.sendMessage("me", {
+      message: `🟢 *MCDash Backup Bot started*\nInterval: ${INTERVAL_MS / 1000}s | Panel: ${MCDASH_URL}`,
+    });
+    log("telegram", `Startup message sent (id=${startMsg.id}), deleting in 20s`);
+    sleep(20_000).then(() =>
+      client.deleteMessages("me", [startMsg.id], { revoke: true }).catch(() => {})
+    );
+  } catch (e) { log("telegram", `Could not send startup message: ${e}`); }
+
   log("bot", `Ready — first backup in ${INTERVAL_MS / 1000}s`);
   setStatus({ phase: "ready", message: `First backup in ${INTERVAL_MS / 1000}s` });
   await sleep(INTERVAL_MS);
