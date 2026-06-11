@@ -30,8 +30,8 @@ for (const [k, v] of Object.entries({
 
 const SESSION_FILE = path.join(SCRIPTS_ROOT, ".telegram_session");
 const STATE_FILE   = path.join(SCRIPTS_ROOT, ".bot_state.json");
-const TMP_BACKUP   = "/tmp/mcdash_backup.zip";
-const STATUS_FILE  = "/tmp/bot_status.json";
+const TMP_BACKUP   = path.join(SCRIPTS_ROOT, "mcdash_backup.zip");
+const STATUS_FILE  = path.join(SCRIPTS_ROOT, ".bot_status.json");
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
